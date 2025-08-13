@@ -1,4 +1,6 @@
 package view;
 
-public class OperacoesView {
+import javax.swing.*;
+
+public class OperacoesView extends JFrame {
 }

@@ -1,4 +1,6 @@
 package view;
 
-public class ClienteView {
+import javax.swing.*;
+
+public class ClienteView extends JFrame {
 }

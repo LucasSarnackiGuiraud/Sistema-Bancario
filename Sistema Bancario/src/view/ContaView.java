@@ -1,4 +1,6 @@
 package view;
 
-public class ContaView {
+import javax.swing.*;
+
+public class ContaView extends JFrame {
 }
