@@ -56,6 +56,6 @@ O projeto está organizado em pacotes para manter a modularidade:
 ## 👤 Integrantes
 
 - João Vitor Zanini Pedro
-- Laura
-- Lucas Sarnacki Giuraud
-- Nathalia
+- Laura Klemba Cordeiro
+- Lucas Sarnacki Guiraud
+- Nathalia Lyra Varela de Albuquerque
