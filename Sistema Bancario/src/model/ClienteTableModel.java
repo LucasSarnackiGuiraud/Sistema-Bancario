@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ClienteTableModel extends AbstractTableModel {
     private List<Cliente> clientes;
-    final private String[] colunas = {"ID", "Nome", "Sobrenome", "RG", "CPF", "Endereço", "Salário"};
+    final private String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereço", "Editar", "Vincular", "Conta"};
 
     public ClienteTableModel() {
         this.clientes = new ArrayList<>();
@@ -46,16 +46,19 @@ public class ClienteTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int linha, int coluna) {
-        Cliente cliente = clientes.get(linha);
-
-        switch (coluna) {
-            case 1: return cliente.getNome();
-            case 2: return cliente.getSobrenome();
-            case 3: return cliente.getRg();
-            case 4: return cliente.getCpf();
-            case 5: return cliente.getEndereco();
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Cliente c = clientes.get(rowIndex);
+        switch (columnIndex) {
+            case 0: return c.getNome();
+            case 1: return c.getSobrenome();
+            case 2: return c.getRg();
+            case 3: return c.getCpf();
+            case 4: return c.getEndereco();
+            case 5: return null; // editar
+            case 6: return null; // vincular
+            case 7: return null; // conta
             default: return null;
         }
     }
+
 }

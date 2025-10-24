@@ -4,37 +4,40 @@ import javax.swing.*;
 import java.awt.*;
 
 public class App extends JFrame {
+
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
     public App() {
         setTitle("Sistema Bancário");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
         // Instancia as telas
-        TelaMenu telaMenu = new TelaMenu(this);
-        TelaClientes telaClientes = new TelaClientes(this);
-        TelaVincularConta telaVincular = new TelaVincularConta(this);
-        TelaManipularConta telaManipular = new TelaManipularConta(this);
+        TelaPrincipal telaPrincipal = new TelaPrincipal(this);
+        TelaEditarCliente telaEditarCliente = new TelaEditarCliente(this);
+        TelaVincularConta telaVincularConta = new TelaVincularConta(this);
+        TelaManipularConta telaManipularConta = new TelaManipularConta(this);
 
-        // Adiciona cada tela ao CardLayout
-        mainPanel.add(telaMenu, "menu");
-        mainPanel.add(telaClientes, "clientes");
-        mainPanel.add(telaVincular, "vincular");
-        mainPanel.add(telaManipular, "manipular");
+        // Adiciona todas ao painel principal
+        mainPanel.add(telaPrincipal, "principal");
+        mainPanel.add(telaEditarCliente, "editar");
+        mainPanel.add(telaVincularConta, "vincular");
+        mainPanel.add(telaManipularConta, "manipular");
 
         add(mainPanel);
+        cardLayout.show(mainPanel, "principal");
+
         setVisible(true);
     }
 
-    // Método público para trocar de tela
-    public void mostrarTela(String nomeTela) {
-        cardLayout.show(mainPanel, nomeTela);
+    public void mostrarTela(String nome) {
+        cardLayout.show(mainPanel, nome);
     }
 
     public static void main(String[] args) {
