@@ -26,7 +26,16 @@ public class TelaPrincipal extends JPanel {
         titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
         titulo.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
         add(titulo, BorderLayout.NORTH);
-
+        //Caixa de texto
+        JPanel painelTexto = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTexto.setBackground(new Color(245, 245, 245));
+        JLabel labelNome = new JLabel("Buscar cliente:");
+        JTextField caixaTexto = new JTextField(20);
+        painelTexto.add(labelNome);
+        painelTexto.add(caixaTexto);
+        add(painelTexto, BorderLayout.BEFORE_FIRST_LINE);
+        String clienteCaixa = caixaTexto.getText();
+        //
         // Modelo e tabela
         modelo = new ClienteTableModel(gerarClientesExemplo());
         tabela = new JTable(modelo);
@@ -52,7 +61,7 @@ public class TelaPrincipal extends JPanel {
     private List<Cliente> gerarClientesExemplo() {
         List<Cliente> clientes = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            Cliente c = new Cliente("Cliente", "Teste" + i, "10427977908", "111.111.111-11", "rua exemplo");
+            Cliente c = new Cliente("Cliente" + i, "Teste" + i, "10427977908", "111.111.111-11", "rua exemplo");
             clientes.add(c);
         }
         return clientes;
