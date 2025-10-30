@@ -7,13 +7,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TelaEditarCliente extends JPanel {
-
-    public TelaEditarCliente(App app) {
+public class TelaCadastrarCliente extends JPanel {
+    private String nome_g;
+    private String sobrenome_g;
+    private String rg_g;
+    private String cpf_g;
+    private String endereco_g;
+    public TelaCadastrarCliente(App app) {
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
-        JLabel titulo = new JLabel("Editar Cliente", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Cadastrar Cliente", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titulo, BorderLayout.NORTH);
@@ -42,9 +46,10 @@ public class TelaEditarCliente extends JPanel {
         JTextField endereco = new JTextField();
         form.add(endereco);
 
-        form.add(new JLabel("Salário:"));
+        //comentado pois não aparece na tela principal
+        /*form.add(new JLabel("Salário:"));
         JTextField salario = new JTextField();
-        form.add(salario);
+        form.add(salario); */
 
         add(form, BorderLayout.CENTER);
 
@@ -56,13 +61,34 @@ public class TelaEditarCliente extends JPanel {
 
         add(botoes, BorderLayout.SOUTH);
 
-        voltar.addActionListener(e -> app.mostrarTela("principal"));
+        voltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nome.setText("");
+                sobrenome.setText("");
+                rg.setText("");
+                cpf.setText("");
+                endereco.setText("");
+                app.mostrarTela("principal");
+            }
+        });
 
-        //adicionar função
         salvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // Cliente c =  new Cliente(nome, sobrenome, rg, cpf, endereco, salario);;
+                nome_g = nome.getText();
+                sobrenome_g = sobrenome.getText();
+                rg_g = rg.getText();
+                cpf_g = cpf.getText();
+                endereco_g = endereco.getText();
+                //Cliente c =  new Cliente(nome_g, sobrenome_g, rg_g, cpf_g, endereco_g);
+                System.out.println(nome_g + " " + sobrenome_g  + " " + rg_g + " " + cpf_g + " " + endereco_g);
+                nome.setText("");
+                sobrenome.setText("");
+                rg.setText("");
+                cpf.setText("");
+                endereco.setText("");
+                app.mostrarTela("principal");
             }
         });
     }

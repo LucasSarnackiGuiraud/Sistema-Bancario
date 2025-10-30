@@ -22,20 +22,52 @@ public class TelaPrincipal extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
+        JPanel painelSuperior = new JPanel();
+        painelSuperior.setLayout(new BoxLayout(painelSuperior, BoxLayout.Y_AXIS)); // Layout vertical
+        painelSuperior.setBackground(new Color(245, 245, 245));
+
+        // Título
         JLabel titulo = new JLabel("Sistema Bancário", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
-        titulo.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
-        add(titulo, BorderLayout.NORTH);
-        //Caixa de texto
-        JPanel painelTexto = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        titulo.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0)); // Reduz a borda inferior
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
+
+        // Painel de Texto (Busca)
+        JPanel painelTexto = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centraliza a busca
         painelTexto.setBackground(new Color(245, 245, 245));
         JLabel labelNome = new JLabel("Buscar cliente:");
         JTextField caixaTexto = new JTextField(20);
         painelTexto.add(labelNome);
         painelTexto.add(caixaTexto);
-        add(painelTexto, BorderLayout.BEFORE_FIRST_LINE);
-        String clienteCaixa = caixaTexto.getText();
-        //
+
+        // Botão de pesquisa
+        JButton botaoBuscar = new JButton("Buscar");
+        painelTexto.add(botaoBuscar);
+        botaoBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String clienteBusca = caixaTexto.getText();
+                modelo.filtrarPorNome(clienteBusca);
+            }
+        });
+        // Botão de Cadastro Cliente
+        JButton botaoCadastrar = new JButton("Cadastrar");
+        painelTexto.add(botaoCadastrar);
+        botaoCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.mostrarTela("cadastrarCliente");
+            }
+        });
+
+        // Adiciona título e painel de texto ao painel superior
+        painelSuperior.add(titulo);
+        painelSuperior.add(painelTexto);
+        painelSuperior.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0)); // Espaço abaixo da busca
+
+        // Adiciona o painel superior ao NORTE
+        add(painelSuperior, BorderLayout.NORTH);
+
         // Modelo e tabela
         modelo = new ClienteTableModel(gerarClientesExemplo());
         tabela = new JTable(modelo);
@@ -44,16 +76,18 @@ public class TelaPrincipal extends JPanel {
         tabela.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 
         // Define renderizadores e editores para ícones
-        tabela.getColumn("Editar").setCellRenderer(new IconeRenderer("../assets/edit.webp"));
-        tabela.getColumn("Vincular").setCellRenderer(new IconeRenderer("../assets/link.webp"));
-        tabela.getColumn("Conta").setCellRenderer(new IconeRenderer("../assets/money"));
+        JButton editar  = new JButton("Editar");
+        //
+        tabela.getColumn("Editar").setIdentifier("Editar");
+        tabela.getColumn("Vincular").setCellRenderer(new IconeRenderer("assets/link.png"));
+        tabela.getColumn("Conta").setCellRenderer(new IconeRenderer("assets/money.png"));
 
         tabela.getColumn("Editar").setCellEditor(new IconeEditor(app, modelo, "editar"));
         tabela.getColumn("Vincular").setCellEditor(new IconeEditor(app, modelo, "vincular"));
         tabela.getColumn("Conta").setCellEditor(new IconeEditor(app, modelo, "conta"));
 
         JScrollPane scroll = new JScrollPane(tabela);
-        scroll.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
+        scroll.setBorder(BorderFactory.createEmptyBorder(0, 40, 40, 40)); // Remove borda superior
         add(scroll, BorderLayout.CENTER);
     }
 
@@ -66,6 +100,9 @@ public class TelaPrincipal extends JPanel {
         }
         return clientes;
     }
+
+    // --- CLASSES INTERNAS (IconeRenderer e IconeEditor) ---
+    // (O código delas permanece o mesmo, pode copiar e colar aqui)
 
     private static class IconeRenderer extends DefaultTableCellRenderer {
         private ImageIcon icone;
@@ -138,6 +175,9 @@ public class TelaPrincipal extends JPanel {
             this.linhaSelecionada = row;
             label.setOpaque(true);
             label.setBackground(isSelected ? new Color(220, 220, 255) : Color.WHITE);
+            // Copia o ícone do renderer para o editor
+            IconeRenderer renderer = (IconeRenderer) table.getCellRenderer(row, column);
+            label.setIcon(renderer.icone);
             return label;
         }
     }
