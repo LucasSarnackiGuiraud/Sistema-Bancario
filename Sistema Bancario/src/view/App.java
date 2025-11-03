@@ -20,12 +20,14 @@ public class App extends JFrame {
 
         // Instancia as telas
         TelaPrincipal telaPrincipal = new TelaPrincipal(this);
+        TelaCadastrarCliente telaCadastrarCliente = new TelaCadastrarCliente(this);
         TelaEditarCliente telaEditarCliente = new TelaEditarCliente(this);
         TelaVincularConta telaVincularConta = new TelaVincularConta(this);
         TelaManipularConta telaManipularConta = new TelaManipularConta(this);
 
         // Adiciona todas ao painel principal
         mainPanel.add(telaPrincipal, "principal");
+        mainPanel.add(telaCadastrarCliente, "cadastrarCliente");
         mainPanel.add(telaEditarCliente, "editar");
         mainPanel.add(telaVincularConta, "vincular");
         mainPanel.add(telaManipularConta, "manipular");
