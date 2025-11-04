@@ -48,7 +48,7 @@ public class TelaPrincipal extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String clienteBusca = caixaTexto.getText();
-                modelo.filtrarPorNome(clienteBusca);
+                modelo.filtrarPorCpf(clienteBusca);
             }
         });
         // Botão de Cadastro Cliente
@@ -95,7 +95,7 @@ public class TelaPrincipal extends JPanel {
     // Simula dados iniciais
     private List<Cliente> gerarClientesExemplo() {
         for (int i = 1; i <= 10; i++) {
-            Cliente c = new Cliente("Cliente", "Teste" + i, "10427977908", "111.111.111-11", "rua exemplo");
+            Cliente c = new Cliente("Cliente" + i, "Teste" + i, "10427977908", "111.111.111-11" + i, "rua exemplo");
             RepositorioDados.getInstance().adicionarCliente(c);
         }
         return RepositorioDados.getInstance().getListaClientes();

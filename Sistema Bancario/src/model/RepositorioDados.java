@@ -3,10 +3,6 @@ package model;
 
 import java.util.ArrayList;
 
-import model.Cliente;
-import model.ContaCorrente;
-import model.ContaInvestimento;
-
 public class RepositorioDados {
 
     private static RepositorioDados instance;

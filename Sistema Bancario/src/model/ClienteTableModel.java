@@ -53,6 +53,24 @@ public class ClienteTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void filtrarPorCpf(String cpfBusca) {
+        if (cpfBusca == null || cpfBusca.trim().isEmpty()) {
+            // Restaura a lista original
+            this.clientes = new ArrayList<>(this.clientesOriginais);
+        } else {
+            List<Cliente> clientesFiltrados = new ArrayList<>();
+            String buscaSemEspacos = cpfBusca.replaceAll("\\s+", ""); // remove espaços
+            // Filtra a partir da lista original
+            for (Cliente c : this.clientesOriginais) {
+                if (c.getCpf().replaceAll("\\s+", "").contains(buscaSemEspacos)) {
+                    clientesFiltrados.add(c);
+                }
+            }
+            this.clientes = clientesFiltrados;
+        }
+        fireTableDataChanged();
+    }
+
     @Override
     public int getRowCount() {
         return clientes.size();
