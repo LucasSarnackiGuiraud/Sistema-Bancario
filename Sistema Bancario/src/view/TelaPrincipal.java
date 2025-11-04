@@ -2,6 +2,7 @@ package view;
 
 import model.Cliente;
 import model.ClienteTableModel;
+import model.RepositorioDados;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -50,12 +51,11 @@ public class TelaPrincipal extends JPanel {
 
     // Simula dados iniciais
     private List<Cliente> gerarClientesExemplo() {
-        List<Cliente> clientes = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 10; i++) {
             Cliente c = new Cliente("Cliente", "Teste" + i, "10427977908", "111.111.111-11", "rua exemplo");
-            clientes.add(c);
+            RepositorioDados.getInstance().adicionarCliente(c);
         }
-        return clientes;
+        return RepositorioDados.getInstance().getListaClientes();
     }
 
     private static class IconeRenderer extends DefaultTableCellRenderer {
