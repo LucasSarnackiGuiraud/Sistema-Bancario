@@ -6,20 +6,24 @@ import java.util.ArrayList;
 
 public class ClienteTableModel extends AbstractTableModel {
     private List<Cliente> clientes;
+    private List<Cliente> clientesOriginais; // Não precisa inicializar aqui
     final private String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereço", "Editar", "Vincular", "Conta"};
 
     public ClienteTableModel() {
         this.clientes = new ArrayList<>();
+        this.clientesOriginais = new ArrayList<>(); // Inicializa ambas
     }
 
     public ClienteTableModel(List<Cliente> clientes) {
         this.clientes = clientes;
+        this.clientesOriginais = new ArrayList<>(clientes);
     }
 
     // Método para atualizar a lista de clientes
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
-        fireTableDataChanged(); // Notifica a tabela que os dados mudaram
+        this.clientesOriginais = new ArrayList<>(clientes);
+        fireTableDataChanged();
     }
 
     // Método para obter um cliente em uma linha específica (necessário para atualização/exclusão)
@@ -28,6 +32,25 @@ public class ClienteTableModel extends AbstractTableModel {
             return clientes.get(linha);
         }
         return null;
+    }
+
+    //Busca cliente pela pesquisa
+    public void filtrarPorNome(String nomeBusca) {
+        if (nomeBusca == null || nomeBusca.trim().isEmpty()) {
+            // Restaura da lista original
+            this.clientes = new ArrayList<>(this.clientesOriginais);
+        } else {
+            List<Cliente> clientesFiltrados = new ArrayList<>();
+            String buscaEmMinusculo = nomeBusca.toLowerCase();
+            // Filtra a partir da lista original
+            for (Cliente c : this.clientesOriginais) {
+                if (c.getNome().toLowerCase().contains(buscaEmMinusculo)) {
+                    clientesFiltrados.add(c);
+                }
+            }
+            this.clientes = clientesFiltrados;
+        }
+        fireTableDataChanged();
     }
 
     @Override
@@ -60,5 +83,4 @@ public class ClienteTableModel extends AbstractTableModel {
             default: return null;
         }
     }
-
 }
