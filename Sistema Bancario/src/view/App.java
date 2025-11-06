@@ -1,10 +1,12 @@
 package view;
 
+import model.ClienteTableModel;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class App extends JFrame {
-
+    private ClienteTableModel clienteTableCompartilhado;
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
@@ -15,13 +17,14 @@ public class App extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
+        clienteTableCompartilhado = new ClienteTableModel();
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
         // Instancia as telas
         TelaPrincipal telaPrincipal = new TelaPrincipal(this);
-        TelaCadastrarCliente telaCadastrarCliente = new TelaCadastrarCliente(this);
-        TelaEditarCliente telaEditarCliente = new TelaEditarCliente(this);
+        TelaCadastrarCliente telaCadastrarCliente = new TelaCadastrarCliente(this, clienteTableCompartilhado);
+        TelaEditarCliente telaEditarCliente = new TelaEditarCliente(this, clienteTableCompartilhado);
         TelaVincularConta telaVincularConta = new TelaVincularConta(this);
         TelaManipularConta telaManipularConta = new TelaManipularConta(this);
 

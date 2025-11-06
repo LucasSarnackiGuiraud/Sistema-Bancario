@@ -1,6 +1,8 @@
 package view;
 
 import model.Cliente;
+import model.ClienteTableModel;
+import model.RepositorioDados;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +11,11 @@ import java.awt.event.ActionListener;
 
 public class TelaEditarCliente extends JPanel {
 
-    public TelaEditarCliente(App app) {
+    private ClienteTableModel modeloDaTabela;
+
+    public TelaEditarCliente(App app, ClienteTableModel modeloRecebido) {
+
+        this.modeloDaTabela = modeloRecebido;
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
@@ -42,9 +48,6 @@ public class TelaEditarCliente extends JPanel {
         JTextField endereco = new JTextField();
         form.add(endereco);
 
-        form.add(new JLabel("Salário:"));
-        JTextField salario = new JTextField();
-        form.add(salario);
 
         add(form, BorderLayout.CENTER);
 
@@ -58,11 +61,20 @@ public class TelaEditarCliente extends JPanel {
 
         voltar.addActionListener(e -> app.mostrarTela("principal"));
 
-        //adicionar função
         salvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // Cliente c =  new Cliente(nome, sobrenome, rg, cpf, endereco, salario);;
+                String nome_g = nome.getText();
+                String sobrenome_g = sobrenome.getText();
+                String rg_g = rg.getText();
+                String cpf_g = cpf.getText();
+                String endereco_g = endereco.getText();
+                //
+                Cliente c =  new Cliente(nome_g, sobrenome_g, rg_g, cpf_g, endereco_g);
+
+
+                JOptionPane.showMessageDialog(app, "Cliente salvo com sucesso!");
+                modeloDaTabela.atualizarTabela();
             }
         });
     }

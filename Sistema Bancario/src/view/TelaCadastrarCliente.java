@@ -1,6 +1,9 @@
+
 package view;
 
 import model.Cliente;
+import model.ClienteTableModel;
+import model.RepositorioDados;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +16,17 @@ public class TelaCadastrarCliente extends JPanel {
     private String rg_g;
     private String cpf_g;
     private String endereco_g;
-    public TelaCadastrarCliente(App app) {
+
+    private ClienteTableModel modeloDaTabela;
+
+    public TelaCadastrarCliente(App app, ClienteTableModel modeloRecebido) {
+        this.modeloDaTabela = modeloRecebido;
+
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
         JLabel titulo = new JLabel("Cadastrar Cliente", SwingConstants.CENTER);
+        // ... (resto do seu layout está ótimo) ...
         titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titulo, BorderLayout.NORTH);
@@ -81,8 +90,12 @@ public class TelaCadastrarCliente extends JPanel {
                 rg_g = rg.getText();
                 cpf_g = cpf.getText();
                 endereco_g = endereco.getText();
-                //Cliente c =  new Cliente(nome_g, sobrenome_g, rg_g, cpf_g, endereco_g);
-                System.out.println(nome_g + " " + sobrenome_g  + " " + rg_g + " " + cpf_g + " " + endereco_g);
+                Cliente c =  new Cliente(nome_g, sobrenome_g, rg_g, cpf_g, endereco_g);
+                RepositorioDados.getInstance().adicionarCliente(c);
+
+                JOptionPane.showMessageDialog(app, "Cliente salvo com sucesso!");
+                modeloDaTabela.atualizarTabela();
+
                 nome.setText("");
                 sobrenome.setText("");
                 rg.setText("");

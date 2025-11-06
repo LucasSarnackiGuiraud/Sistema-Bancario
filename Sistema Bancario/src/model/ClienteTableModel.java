@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ClienteTableModel extends AbstractTableModel {
+
     private List<Cliente> clientes;
     private List<Cliente> clientesOriginais; // Não precisa inicializar aqui
     final private String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereço", "Editar", "Vincular", "Conta"};
 
     public ClienteTableModel() {
         this.clientes = new ArrayList<>();
-        this.clientesOriginais = new ArrayList<>(); // Inicializa ambas
+        this.clientesOriginais = new ArrayList<>();
     }
 
     public ClienteTableModel(List<Cliente> clientes) {
@@ -25,11 +26,25 @@ public class ClienteTableModel extends AbstractTableModel {
         this.clientesOriginais = new ArrayList<>(clientes);
         fireTableDataChanged();
     }
+    //
+    public void atualizarTabela() {
+        this.clientesOriginais = RepositorioDados.getInstance().getListaClientes();
+
+        this.clientes = new ArrayList<>(this.clientesOriginais);
+        fireTableDataChanged();
+    }
 
     // Método para obter um cliente em uma linha específica (necessário para atualização/exclusão)
     public Cliente getCliente(int linha) {
         if (linha >= 0 && linha < clientes.size()) {
             return clientes.get(linha);
+        }
+        return null;
+    }
+    //
+    public Integer getLinha(int linha) {
+        if (linha >= 0 && linha < clientes.size()) {
+            return linha;
         }
         return null;
     }
@@ -54,14 +69,16 @@ public class ClienteTableModel extends AbstractTableModel {
     }
 
     public void filtrarPorCpf(String cpfBusca) {
+        //
+        List<Cliente> listaMestre = RepositorioDados.getInstance().getListaClientes();
+
         if (cpfBusca == null || cpfBusca.trim().isEmpty()) {
-            // Restaura a lista original
-            this.clientes = new ArrayList<>(this.clientesOriginais);
+            this.clientes = new ArrayList<>(listaMestre);
         } else {
             List<Cliente> clientesFiltrados = new ArrayList<>();
-            String buscaSemEspacos = cpfBusca.replaceAll("\\s+", ""); // remove espaços
-            // Filtra a partir da lista original
-            for (Cliente c : this.clientesOriginais) {
+            String buscaSemEspacos = cpfBusca.replaceAll("\\s+", "");
+
+            for (Cliente c : listaMestre) {
                 if (c.getCpf().replaceAll("\\s+", "").contains(buscaSemEspacos)) {
                     clientesFiltrados.add(c);
                 }

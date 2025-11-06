@@ -30,13 +30,13 @@ public class TelaPrincipal extends JPanel {
         // Título
         JLabel titulo = new JLabel("Sistema Bancário", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
-        titulo.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0)); // Reduz a borda inferior
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT); // Centraliza no BoxLayout
+        titulo.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Painel de Texto (Busca)
-        JPanel painelTexto = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centraliza a busca
+        JPanel painelTexto = new JPanel(new FlowLayout(FlowLayout.CENTER));
         painelTexto.setBackground(new Color(245, 245, 245));
-        JLabel labelNome = new JLabel("Buscar cliente:");
+        JLabel labelNome = new JLabel("Buscar cliente por Cpf:");
         JTextField caixaTexto = new JTextField(20);
         painelTexto.add(labelNome);
         painelTexto.add(caixaTexto);
@@ -49,6 +49,7 @@ public class TelaPrincipal extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String clienteBusca = caixaTexto.getText();
                 modelo.filtrarPorCpf(clienteBusca);
+                modelo.fireTableDataChanged();
             }
         });
         // Botão de Cadastro Cliente
@@ -70,39 +71,31 @@ public class TelaPrincipal extends JPanel {
         add(painelSuperior, BorderLayout.NORTH);
 
         // Modelo e tabela
-        modelo = new ClienteTableModel(gerarClientesExemplo());
+        modelo = new ClienteTableModel(RepositorioDados.getInstance().getListaClientes());
         tabela = new JTable(modelo);
         tabela.setRowHeight(30);
         tabela.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabela.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
-
         // Define renderizadores e editores para ícones
-        JButton editar  = new JButton("Editar");
+        JButton buttonEditar  = new JButton("Editar");
+        add(buttonEditar, BorderLayout.SOUTH);
+        buttonEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //
+                int linha = tabela.getSelectedRow();
+                System.out.println(linha);
+                System.out.println();
+                app.mostrarTela("editar");
+            }
+        });
         //
-        tabela.getColumn("Editar").setIdentifier("Editar");
-        tabela.getColumn("Vincular").setCellRenderer(new IconeRenderer("assets/link.png"));
-        tabela.getColumn("Conta").setCellRenderer(new IconeRenderer("assets/money.png"));
 
-        tabela.getColumn("Editar").setCellEditor(new IconeEditor(app, modelo, "editar"));
-        tabela.getColumn("Vincular").setCellEditor(new IconeEditor(app, modelo, "vincular"));
-        tabela.getColumn("Conta").setCellEditor(new IconeEditor(app, modelo, "conta"));
 
         JScrollPane scroll = new JScrollPane(tabela);
         scroll.setBorder(BorderFactory.createEmptyBorder(0, 40, 40, 40)); // Remove borda superior
         add(scroll, BorderLayout.CENTER);
     }
-
-    // Simula dados iniciais
-    private List<Cliente> gerarClientesExemplo() {
-        for (int i = 1; i <= 10; i++) {
-            Cliente c = new Cliente("Cliente" + i, "Teste" + i, "10427977908", "111.111.111-11" + i, "rua exemplo");
-            RepositorioDados.getInstance().adicionarCliente(c);
-        }
-        return RepositorioDados.getInstance().getListaClientes();
-    }
-
-    // --- CLASSES INTERNAS (IconeRenderer e IconeEditor) ---
-    // (O código delas permanece o mesmo, pode copiar e colar aqui)
 
     private static class IconeRenderer extends DefaultTableCellRenderer {
         private ImageIcon icone;
@@ -175,7 +168,6 @@ public class TelaPrincipal extends JPanel {
             this.linhaSelecionada = row;
             label.setOpaque(true);
             label.setBackground(isSelected ? new Color(220, 220, 255) : Color.WHITE);
-            // Copia o ícone do renderer para o editor
             IconeRenderer renderer = (IconeRenderer) table.getCellRenderer(row, column);
             label.setIcon(renderer.icone);
             return label;
