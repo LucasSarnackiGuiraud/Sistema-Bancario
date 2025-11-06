@@ -1,4 +1,3 @@
-// Ajuste o nome do pacote para corresponder ao seu projeto
 package model;
 
 import java.util.ArrayList;
@@ -10,11 +9,13 @@ public class RepositorioDados {
     private ArrayList<Cliente> listaClientes;
     private ArrayList<ContaInvestimento> listaContasInvestimento;
     private ArrayList<ContaCorrente> listaContasCorrente;
+    private int proximoNumeroConta;
 
     private RepositorioDados() {
         listaClientes = new ArrayList<>();
         listaContasInvestimento = new ArrayList<>();
         listaContasCorrente = new ArrayList<>();
+        proximoNumeroConta = 1001; // Inicia a contagem em 1001
     }
 
     public static RepositorioDados getInstance() {
@@ -24,8 +25,8 @@ public class RepositorioDados {
         return instance;
     }
 
-    //getters
-    
+    // --- Getters das Listas ---
+
     public ArrayList<Cliente> getListaClientes() {
         return listaClientes;
     }
@@ -34,16 +35,11 @@ public class RepositorioDados {
         return listaContasInvestimento;
     }
 
-    public void setListaContasInvestimento(ArrayList<ContaInvestimento> listaContasInvestimento) {
-        this.listaContasInvestimento = listaContasInvestimento;
-    }
-
     public ArrayList<ContaCorrente> getListaContasCorrente() {
         return listaContasCorrente;
     }
 
-
-    // Métodos de Atalho
+    // --- Métodos de Manipulação (CRUD) ---
 
     public void adicionarCliente(Cliente cliente) {
         this.listaClientes.add(cliente);
@@ -57,6 +53,23 @@ public class RepositorioDados {
         this.listaContasCorrente.add(contaCorrente);
     }
 
+    public void removerCliente(Cliente cliente) {
+        if (cliente == null) return;
+
+        Conta contaDoCliente = cliente.getConta();
+
+        if (contaDoCliente != null) {
+            if (contaDoCliente instanceof ContaCorrente) {
+                listaContasCorrente.remove((ContaCorrente) contaDoCliente);
+            } else if (contaDoCliente instanceof ContaInvestimento) {
+                listaContasInvestimento.remove((ContaInvestimento) contaDoCliente);
+            }
+        }
+        listaClientes.remove(cliente);
+    }
+
+    // --- Métodos de Busca (Query) ---
+
     public Cliente buscarClientePorCpf(String cpf) {
         for (Cliente c : listaClientes) {
             if (c.getCpf().equals(cpf)) {
@@ -64,5 +77,22 @@ public class RepositorioDados {
             }
         }
         return null;
+    }
+
+    public Conta buscarContaPorCpf(String cpf) {
+        Cliente cliente = buscarClientePorCpf(cpf);
+        if (cliente != null) {
+            return cliente.getConta();
+        }
+        return null;
+    }
+
+    // --- Métodos Utilitários ---
+
+    /**
+     * Gera e retorna um número de conta único e sequencial.
+     */
+    public int gerarProximoNumeroConta() {
+        return this.proximoNumeroConta++;
     }
 }
