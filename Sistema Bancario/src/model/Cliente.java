@@ -1,6 +1,6 @@
 package model;
 
-public class Cliente {
+public class Cliente implements Comparable<Cliente> {
     private String nome;
     private String sobrenome;
     private String rg;
@@ -34,5 +34,25 @@ public class Cliente {
 
     public Conta getConta() { return conta; }
     public void setConta(Conta conta) { this.conta = conta; }
+
+    public double getSalario() {
+        if (this.conta == null) {
+            return 0.0;
+        }
+        return this.conta.getSaldo();
+    }
+
+    @Override
+    public int compareTo(Cliente outro) {
+        // 1. Comparação por Nome (Ordem Alfabética)
+        int comparacaoNome = this.nome.compareToIgnoreCase(outro.nome);
+
+        if (comparacaoNome != 0) {
+            return comparacaoNome;
+        }
+
+        // 2. Se os nomes forem iguais, compara pelo Sobrenome (Ordem Alfabética)
+        return this.sobrenome.compareToIgnoreCase(outro.sobrenome);
+    }
 
 }

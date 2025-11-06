@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ClienteTableModel extends AbstractTableModel {
 
     private List<Cliente> clientes;
-    private List<Cliente> clientesOriginais; // Não precisa inicializar aqui
+    private List<Cliente> clientesOriginais;
     final private String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereço", "Editar", "Vincular", "Conta"};
 
     public ClienteTableModel() {
@@ -15,12 +15,6 @@ public class ClienteTableModel extends AbstractTableModel {
         this.clientesOriginais = new ArrayList<>();
     }
 
-    public ClienteTableModel(List<Cliente> clientes) {
-        this.clientes = clientes;
-        this.clientesOriginais = new ArrayList<>(clientes);
-    }
-
-    // Método para atualizar a lista de clientes
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
         this.clientesOriginais = new ArrayList<>(clientes);
@@ -34,7 +28,6 @@ public class ClienteTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    // Método para obter um cliente em uma linha específica (necessário para atualização/exclusão)
     public Cliente getCliente(int linha) {
         if (linha >= 0 && linha < clientes.size()) {
             return clientes.get(linha);
@@ -49,15 +42,12 @@ public class ClienteTableModel extends AbstractTableModel {
         return null;
     }
 
-    //Busca cliente pela pesquisa
     public void filtrarPorNome(String nomeBusca) {
         if (nomeBusca == null || nomeBusca.trim().isEmpty()) {
-            // Restaura da lista original
             this.clientes = new ArrayList<>(this.clientesOriginais);
         } else {
             List<Cliente> clientesFiltrados = new ArrayList<>();
             String buscaEmMinusculo = nomeBusca.toLowerCase();
-            // Filtra a partir da lista original
             for (Cliente c : this.clientesOriginais) {
                 if (c.getNome().toLowerCase().contains(buscaEmMinusculo)) {
                     clientesFiltrados.add(c);
@@ -73,12 +63,20 @@ public class ClienteTableModel extends AbstractTableModel {
         List<Cliente> listaMestre = RepositorioDados.getInstance().getListaClientes();
 
         if (cpfBusca == null || cpfBusca.trim().isEmpty()) {
+<<<<<<< HEAD
             this.clientes = new ArrayList<>(listaMestre);
         } else {
             List<Cliente> clientesFiltrados = new ArrayList<>();
             String buscaSemEspacos = cpfBusca.replaceAll("\\s+", "");
 
             for (Cliente c : listaMestre) {
+=======
+            this.clientes = new ArrayList<>(this.clientesOriginais);
+        } else {
+            List<Cliente> clientesFiltrados = new ArrayList<>();
+            String buscaSemEspacos = cpfBusca.replaceAll("\\s+", "");
+            for (Cliente c : this.clientesOriginais) {
+>>>>>>> e0bb94bcab3725b5ab0132734333df8b65cf3613
                 if (c.getCpf().replaceAll("\\s+", "").contains(buscaSemEspacos)) {
                     clientesFiltrados.add(c);
                 }
@@ -112,10 +110,27 @@ public class ClienteTableModel extends AbstractTableModel {
             case 2: return c.getRg();
             case 3: return c.getCpf();
             case 4: return c.getEndereco();
-            case 5: return null; // editar
-            case 6: return null; // vincular
-            case 7: return null; // conta
+            case 5: return "Editar"; // Texto do botão
+            case 6: return "Vincular"; // Texto do botão
+            case 7: return "Operar"; // Texto do botão
             default: return null;
         }
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        // Colunas 5 (Editar), 6 (Vincular) e 7 (Conta) são botões
+        return columnIndex == 5 || columnIndex == 6 || columnIndex == 7;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        // Colunas 5 (Editar), 6 (Vincular) e 7 (Operar)
+        if (columnIndex == 5 || columnIndex == 6 || columnIndex == 7) {
+            return Object.class;
+        }
+        // Para todas as outras colunas, retorna String.class (ou o tipo de dado real)
+        return String.class;
+    }
 }
+
